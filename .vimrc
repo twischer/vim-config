@@ -38,7 +38,7 @@ nnoremap <F4> :let $VIM_DIR=expand('%:p:h')<CR>:terminal<CR>cd $VIM_DIR<CR>
 "  }
 "fi
 set autoshelldir
-tnoremap <F4> <C-W>:terminal<CR>
+tnoremap <F4> <C-A>:terminal<CR>
 
 " Use case sentive search for "/" when capital leters used
 set smartcase
@@ -77,7 +77,7 @@ nmap gx :silent execute "!DISPLAY=:0 xdg-open " . shellescape("<cWORD>") . " &"<
 
 "Terminal mode
 " Allow to forward Ctrl-W to a application running in the terminal
-"set termwinkey=<C-A>
+set termwinkey=<C-A>
 tnoremap <Esc> <C-\><C-n>
 " Paste clipboard into terminal
 "TODO blocks Ctrl-V in normal mode to enter block selection mode
@@ -88,10 +88,10 @@ nnoremap <C-H> <C-W>h
 nnoremap <C-J> <C-W>j
 nnoremap <C-K> <C-W>k
 nnoremap <C-L> <C-W>l
-tnoremap <C-H> <C-W>h
-tnoremap <C-J> <C-W>j
-tnoremap <C-K> <C-W>k
-tnoremap <C-L> <C-W>l
+tnoremap <C-H> <C-A>h
+tnoremap <C-J> <C-A>j
+tnoremap <C-K> <C-A>k
+tnoremap <C-L> <C-A>l
 
 "FORMAT
 "======
