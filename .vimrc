@@ -26,8 +26,19 @@ nnoremap <F1> :pclose<CR>:silent YcmCompleter GetDoc<CR>
 nnoremap <F2> :YcmCompleter GoToDefinitionElseDeclaration<CR>
 nnoremap <F3> :YcmCompleter GoToReferences<CR>
 " :copen :cclose
+
+" Terminal
+nnoremap <F4> :let $VIM_DIR=expand('%:p:h')<CR>:terminal<CR>cd $VIM_DIR<CR>
+" Add the following lines to ~/.bashrc. With autoshelldir enabled vim will
+" listen for the escape secence sent by the terminal
+"if [[ -n "$VIM_TERMINAL" ]]; then
+"  PROMPT_COMMAND='_vim_sync_PWD'
+"  function _vim_sync_PWD() {
+"    printf '\033]7;file://%s\033\\' "$PWD"
+"  }
+"fi
 set autoshelldir
-map <F4> :let $VIM_DIR=expand('%:p:h')<CR>:terminal<CR>cd $VIM_DIR<CR>
+tnoremap <F4> <C-W>:terminal<CR>
 
 " Use case sentive search for "/" when capital leters used
 set smartcase
@@ -67,7 +78,7 @@ nmap gx :silent execute "!DISPLAY=:0 xdg-open " . shellescape("<cWORD>") . " &"<
 "Terminal mode
 " Allow to forward Ctrl-W to a application running in the terminal
 "set termwinkey=<C-A>
-"tnoremap <C-A> <C-\><C-n>
+tnoremap <Esc> <C-\><C-n>
 " Paste clipboard into terminal
 "TODO blocks Ctrl-V in normal mode to enter block selection mode
 "tnoremap <C-S-V> <C-W>"+
@@ -110,9 +121,9 @@ set ruler
 set backspace=indent,eol,start
 set clipboard=unnamedplus
 " Copy
-vmap <F7> :!xclip -f -sel clip -d localhost:10.0<CR>
+"vmap <F7> :!xclip -f -sel clip -d localhost:10.0<CR>
 " Paste
-map <F8> :r!xclip -o -sel clip -d localhost:10.0<CR>
+"map <F8> :r!xclip -o -sel clip -d localhost:10.0<CR>
 
 "Not enabled by default on this machine
 syntax on
@@ -125,7 +136,33 @@ autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
 autocmd InsertLeave * match ExtraWhitespace /\s\+$/
 autocmd BufWinLeave * call clearmatches()
 
-map <F9>  :setlocal spell spelllang=en <return>
+" vimdiff
+function! DiffToggle()
+    if &diff
+        windo diffoff
+    else
+        windo diffthis
+    endif
+endfunction
+nnoremap <silent> <F8> :call DiffToggle()<CR>
+
+" Spell Check
+let b:myLang=0
+let g:myLangList=["nospell","en","de"]
+function! ToggleSpell()
+  let b:myLang=b:myLang+1
+  if b:myLang>=len(g:myLangList) | let b:myLang=0 | endif
+  if b:myLang==0
+    setlocal nospell
+  else
+    execute "setlocal spell spelllang=".get(g:myLangList, b:myLang)
+  endif
+  echo "spell checking language:" g:myLangList[b:myLang]
+endfunction
+
+nmap <silent> <F7> :call ToggleSpell()<CR>
+imap <F7> <C-o>:call ToggleSpell()<CR>
+" See https://vim.fandom.com/wiki/Toggle_spellcheck_with_function_keys
 
 " See https://unix.stackexchange.com/questions/348771/why-do-vim-colors-look-different-inside-and-outside-of-tmux
 set background=dark
