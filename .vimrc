@@ -27,6 +27,11 @@ nnoremap <F2> :YcmCompleter GoToDefinitionElseDeclaration<CR>
 nnoremap <F3> :YcmCompleter GoToReferences<CR>
 " :copen :cclose
 
+
+"Autocomplte paths like bash
+set wildmenu
+set wildmode=list:longest
+
 " Terminal
 nnoremap <F4> :let $VIM_DIR=expand('%:p:h')<CR>:terminal<CR>cd $VIM_DIR<CR>
 " Add the following lines to ~/.bashrc. With autoshelldir enabled vim will
@@ -78,20 +83,22 @@ nmap gx :silent execute "!DISPLAY=:0 xdg-open " . shellescape("<cWORD>") . " &"<
 "Terminal mode
 " Allow to forward Ctrl-W to a application running in the terminal
 set termwinkey=<C-A>
-tnoremap <Esc> <C-\><C-n>
+" Do not use Esc because it has to be forwarded to vim running in the vim terminal
+"tnoremap <Esc> <C-\><C-n>
+tnoremap <C-A> <C-\><C-n>
 " Paste clipboard into terminal
 "TODO blocks Ctrl-V in normal mode to enter block selection mode
 "tnoremap <C-S-V> <C-W>"+
 
-" Navigate between vim windows
-nnoremap <C-H> <C-W>h
-nnoremap <C-J> <C-W>j
-nnoremap <C-K> <C-W>k
-nnoremap <C-L> <C-W>l
-tnoremap <C-H> <C-A>h
-tnoremap <C-J> <C-A>j
-tnoremap <C-K> <C-A>k
-tnoremap <C-L> <C-A>l
+" Navigate between vim windows via Alt-Arrows
+nnoremap <Esc>[1;3D <C-W>h
+nnoremap <Esc>[1;3B <C-W>j
+nnoremap <Esc>[1;3A <C-W>k
+nnoremap <Esc>[1;3C <C-W>l
+tnoremap <Esc>[1;3D <C-A>h
+tnoremap <Esc>[1;3B <C-A>j
+tnoremap <Esc>[1;3A <C-A>k
+tnoremap <Esc>[1;3C <C-A>l
 
 "FORMAT
 "======
