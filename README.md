@@ -1,5 +1,6 @@
 Vim help
 ========
+gcc             Comment out a line
 Ctrl+V					Zeilen Markieren
 : s/^/#					Markierte Zeilen bearbeiten
 :s/\([^ ]\)  /\1[]
@@ -14,12 +15,24 @@ u						Letzte Operation Rückgängig
 Ctrl+R					Wiederherstellen
 
 G			Zur letzten Zeile springen
+0               To first character in the line
 $			Zum letzten Zeichen springen
 gg			Zur ersten Zeile
 NG			Zu Zeile N springen
+)               Sentence forward
+(               Sentence backwards
+}               Paragraph forward
+{               Paragraph backwards
 
 
 
+o               Insert a new line below the current line and go to INSERT mode
+O               Insert a new line above the current line and go to INSERT mode
+x               Delete character under the cursor
+X               Delete character left of the cursor
+dd              Delete current line
+dw              Delete current word
+D               Delete to the end of the line
 yy or Y 		to copy the line
 p 			to paste the copied or deleted text after the current line
 P 			to paste the copied or deleted text before the current line
@@ -61,7 +74,7 @@ Ctrl-w S	Duplicate current window horizontal
 Ctrl-w V	Duplicate current window vertical
 Ctrl-w Q	Close the current window
 Ctrl-w O	Fullscreen close other buffers
-Ctrl-w _ Ctrl+W |	Fullscreen
+Ctrl-w _ Ctrl+W |	Fullscreen  (Alt+f and Alt+q)
 Ctrl-w =		Windows
 Ctrl-w x		Swap window with lower one
 Ctrl-w R		Rotate windows up

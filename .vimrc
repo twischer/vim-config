@@ -50,7 +50,7 @@ set smartcase
 
 let &grepprg='grep -H -n $*'
 "map f :silent grep '\b<cword>\b' <CR>:copen<CR>
-map f :grep -r -I --include=\*.{c,h,cpp,hpp,ino,py,java} '\b<cword>\b' <CR><CR>:copen<CR>
+map f :grep -r -I --include=\*.{c,h,cc,cpp,hpp,ino,py,java,kt} '\b<cword>\b' <CR><CR>:copen<CR>
 " grep in current file
 map F :grep -a '\b<cword>\b' % <CR><CR>:copen<CR>
 
@@ -95,10 +95,31 @@ nnoremap <Esc>[1;3D <C-W>h
 nnoremap <Esc>[1;3B <C-W>j
 nnoremap <Esc>[1;3A <C-W>k
 nnoremap <Esc>[1;3C <C-W>l
+inoremap <Esc>[1;3D <Esc><C-W>h
+inoremap <Esc>[1;3B <Esc><C-W>j
+inoremap <Esc>[1;3A <Esc><C-W>k
+inoremap <Esc>[1;3C <Esc><C-W>l
 tnoremap <Esc>[1;3D <C-A>h
 tnoremap <Esc>[1;3B <C-A>j
 tnoremap <Esc>[1;3A <C-A>k
 tnoremap <Esc>[1;3C <C-A>l
+
+" Alt-f opens current buffer in new tab => fullscreen on
+for i in range(97,122)
+  let c = nr2char(i)
+  exec "map \e".c." <A-".c.">"
+  exec "map! \e".c." <A-".c.">"
+  exec "tmap \e".c." <A-".c.">"
+endfor
+nnoremap <A-f> :execute "tab sb ".bufnr("%")<CR>
+inoremap <A-f> <Esc>:execute "tab sb ".bufnr("%")<CR>
+tnoremap <A-f> <C-A>:execute "tab sb ".bufnr("%")<CR>
+" Do not write the file because it might be buffer without a file name
+" Therefore the command would fail
+nnoremap <A-q> :q<CR>
+nnoremap <A-x> :wqa<CR>
+inoremap <A-q> <Esc>:q<CR>
+tnoremap <A-q> <C-A>:q<CR>
 
 "FORMAT
 "======
@@ -108,7 +129,7 @@ set colorcolumn=81
 " 8 char tabs
 "set autoindent noexpandtab tabstop=8 shiftwidth=8
 "Mark down
-"set tabstop=4 softtabstop=0 expandtab shiftwidth=4 smarttab
+set tabstop=4 softtabstop=0 expandtab shiftwidth=4 smarttab
 "ESM
 "set tabstop=3 softtabstop=0 expandtab shiftwidth=3 smarttab
 "set tabstop=2 softtabstop=0 expandtab shiftwidth=2 smarttab
