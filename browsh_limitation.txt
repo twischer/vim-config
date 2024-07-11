@@ -1,0 +1,10 @@
+browsh can show webpage in console with colors simular to tiv
+
+Not supported in Linux console Alt+Ctrl+F1 in getty
+Because only 512 unicode charcaters are used.
+Therefore the follwoing character is not supported
+
+▚
+
+See https://askubuntu.com/questions/23610/how-to-enable-unicode-support-in-a-tty
+

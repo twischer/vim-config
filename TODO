@@ -1,0 +1,79 @@
+TODO do not insert additional newlines in copy of terminal output when terminal window to small
+TODO :copen always at buttom over full width of vim
+? Maybe workarounded by full screen via new tab
+    - Fullscreen via new tab difficult to support multi screen setup
+TODO :copen enter opens always in window where f or F was pressed
+TODO support to switch to already opened buffer by selecting it via arrow keys
+- is slower compared to :Nb when N is known
+TODO change pwd of vim to path of terminal or allow to open file relative to terminal path
+- eigentlich nicht nötig, da ich erst datei öffnen kann und dann terminal in verzeichnis von datei
+TODO search case insensitive when in small letters
+TODO Alt+q opens the latest opened file in the small sized window
+    - Alt+f can be used for searching in files and Alt+q the last file will still be open
+
+tmux + vim
+==========
+++ Copy paste auch in remote consolen mit den sleben tastencombinationen möglich
+	- vim in vim würden tastenkombinationen andere sein
++ Bash pfad übernahme geht out of the box
++ Reattach to session (screen or mosh required for "vim as tmux")
++ Copy single line over multilines without line breaks
+? Copy/Paste in X11 clipboard
+* Copy word
+	- b Space e
+* Copy path
+	- b Space E
+* Copy multiple line
+	- Enter selection with V
+	- Enter selection with space and toggel block mode with v
+* Move Pan to different window
+	- Ctrl-B ! to move to new window
+	- :join-pane -t :N to move to Window N
+	- in different session
+		tmux new -s session2
+		:join-pane -t session2:N
+* Fullscreen Ctrl-B z
+
+
+vim as tmux
+===========
+++ Weniger Speicherverbruach, da nur ein vim Prozess
++ Simple selection of whole line
++ Same key bindins for all windows (also search results)
+	- Ctrl+W S or V to split window
+	- Ctrl+W _ Ctrl+W | fullscreen => Ctrl+W = windows
+	- Ctrl+W T move to new tab => gt to switch between tabs
+	- :noremap tt :tab split<CR> and :wq
+* Key bindings simular for both Ctrl-B + X vs Ctrl-W + X
+	- i3 is better with Meta-Arrow, in case of multiple commands not always again Ctrl-B
+
+when vimdiff im terminal ausgeführt wird keyforwarding aktivieren (zB durch vim --remote-send)
+	- bei ausfürung forwarden
+	- bei beenden nicht mehr forwarden
+	- sonderkey um forwarding ein und aus zu schlaten <<<
+$ vim --servername vimdiff ...
+$ vimdiff --remote-wait  ...
+- Some additional logic has to be done to open the files in split window and a key for closing them
+- When vimdiff in vim term muss Ctrl-W weitergeleitet werden können
+TODO Ctrl-Arrow keys not working to navigate per word
+TODO Alt-Arrow keys used in Alt-Ctrl-Fx terminal to switch between terminals
+- find another key code e.g. Windows key
+TODO tastenkombi festlegen, um Wörter zu selktieren und mit kürser von wort zu wort springen
+- tastenkombi um kopieren und ins selbe termininal einfügen
+TODO find alternative way for autoshelldir https://vimhelp.org/terminal.txt.html#terminal-autoshelldir
+TODO Multiscreen vim
+- Doublicate session output, freeze inactive session, open last tap on resume
+TODO execute shell scripts like make files to allow setting enviornment and executing make
+TODO git difftool dateien nach vim session schieben
+? git diff in :! ausführen
+	- Key binding forwarding aktivieren before commando ausgeführt wird
+	- autocomplete fehlt
+browsh utf issue in tty1?
+fast switch between X11 and console
+$ sudo chvt 7
+- Add key binding to swap between tty1 (vim) and tty7(X11)
+Avoid linebreak in vim terminal by enforcing screen width
+
+vim
+===
++ Copy command over mutliple lines
