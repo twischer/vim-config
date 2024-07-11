@@ -1,0 +1,3 @@
+[submodule "emacs-ycmd-linuxkernel"]
+	path = emacs-ycmd-linuxkernel
+	url = https://github.com/sujankh/emacs-ycmd-linuxkernel.git
