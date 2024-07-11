@@ -1,204 +1,292 @@
-"YouCompleteMe
-"=============
-let g:ycm_min_num_of_chars_for_completion = 1
-let g:ycm_complete_in_comments = 1
+-- Execute the following commands to install packer.vim
+-- git clone --depth 1 https://github.com/wbthomason/packer.nvim ~/.local/share/nvim/site/pack/packer/start/packer.nvim
+-- :packadd packer.nvim
 
-" Do not select anything in the completion with the arrow up and down keys
-let g:ycm_key_list_select_completion = ['<TAB>']
-let g:ycm_key_list_previous_completion = ['<S-TAB>']
-inoremap <expr> <Down>  pumvisible() ? "\<C-E>\<C-O>j" : "\<Down>"
-inoremap <expr> <Up>    pumvisible() ? "\<C-E>\<C-O>k" : "\<Up>"
+local use = require('packer').use
+require('packer').startup(function()
+  use 'wbthomason/packer.nvim'
+  use 'neovim/nvim-lspconfig' -- Collection of configurations for built-in LSP client
+  use 'hrsh7th/nvim-cmp' -- Autocompletion plugin
+  use 'hrsh7th/cmp-nvim-lsp' -- LSP source for nvim-cmp
+  use 'hrsh7th/cmp-buffer'
+  use 'hrsh7th/cmp-path'
+  use 'hrsh7th/cmp-cmdline'
+  use 'saadparwaiz1/cmp_luasnip' -- Snippets source for nvim-cmp
+  use 'L3MON4D3/LuaSnip' -- Snippets plugin
+  -- Advanced sytax highlighting
+  use 'nvim-treesitter/nvim-treesitter'
+  run = ':TSUpdate'
+  -- GIT diff viewer
+  use { 'sindrets/diffview.nvim', requires = 'nvim-lua/plenary.nvim' }
+  -- Fast jump to words simular to kumping to links in vimium for Firefox
+  -- TODO test it later
+  --use {
+  --  'phaazon/hop.nvim',
+  --  branch = 'v2', -- optional but strongly recommended
+  --  config = function()
+  --    -- you can configure Hop the way you like here; see :h hop-config
+  --    require'hop'.setup { keys = 'etovxqpdygfblzhckisuran' }
+  --  end
+  --}
+  -- Uncomment to update all plugins
+  --require('packer').sync()
+end)
 
-let g:ycm_autoclose_preview_window_after_completion = 1
-let g:syntastic_enable_signs=1
-let g:syntastic_error_symbol = '✗'
-let g:syntastic_warning_symbol = '⚠'
-"let g:ycm_filepath_completion_use_working_dir = 0
-let g:ycm_global_ycm_extra_conf = '~/beschreibungen/howtos/vim/ycm_extra_conf.py'
-"let g:ycm_clangd_args = ['--fallback-style=~/.vim/bundle/YouCompleteMe/linux.clang-format']
+-- Auto-completion
+-- See https://github.com/neovim/nvim-lspconfig/wiki/Autocompletion#nvim-cmp
+-- Add additional capabilities supported by nvim-cmp
+local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
-" Let clangd fully control code completion
-let g:ycm_clangd_uses_ycmd_caching = 0
-" Use installed clangd, not YCM-bundled clangd which doesn't get updates.
-"let g:ycm_clangd_binary_path = exepath("clangd")
+local lspconfig = require('lspconfig')
 
-nnoremap <F1> :pclose<CR>:silent YcmCompleter GetDoc<CR>
-nnoremap <F2> :YcmCompleter GoToDefinitionElseDeclaration<CR>
-nnoremap <F3> :YcmCompleter GoToReferences<CR>
-" :copen :cclose
+-- Enable some language servers with the additional completion capabilities offered by nvim-cmp
+local servers = { 'clangd', 'rust_analyzer', 'pyright', 'tsserver' }
+for _, lsp in ipairs(servers) do
+  lspconfig[lsp].setup {
+    -- on_attach = my_custom_on_attach,
+    capabilities = capabilities,
+  }
+end
 
+-- luasnip setup
+local luasnip = require 'luasnip'
 
-"Autocomplte paths like bash
-set wildmenu
-set wildmode=list:longest
+-- nvim-cmp setup
+local cmp = require 'cmp'
+cmp.setup {
+  snippet = {
+    expand = function(args)
+      luasnip.lsp_expand(args.body)
+    end,
+  },
+  mapping = cmp.mapping.preset.insert({
+    ['<C-d>'] = cmp.mapping.scroll_docs(-4),
+    ['<C-f>'] = cmp.mapping.scroll_docs(4),
+    ['<C-Space>'] = cmp.mapping.complete(),
+    ['<CR>'] = cmp.mapping.confirm {
+      behavior = cmp.ConfirmBehavior.Replace,
+      select = true,
+    },
+    ['<Tab>'] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        cmp.select_next_item()
+      elseif luasnip.expand_or_jumpable() then
+        luasnip.expand_or_jump()
+      else
+        fallback()
+      end
+    end, { 'i', 's' }),
+    ['<S-Tab>'] = cmp.mapping(function(fallback)
+      if cmp.visible() then
+        cmp.select_prev_item()
+      elseif luasnip.jumpable(-1) then
+        luasnip.jump(-1)
+      else
+        fallback()
+      end
+    end, { 'i', 's' }),
+  }),
+  sources = {
+    { name = 'nvim_lsp' },
+    { name = 'luasnip' },
+  },
+}
+-- Set configuration for specific filetype.
+cmp.setup.filetype('gitcommit', {
+  sources = cmp.config.sources({
+    { name = 'cmp_git' }, -- You can specify the `cmp_git` source if you were installed it.
+  }, {
+    { name = 'buffer' },
+  })
+})
 
-" Terminal
-nnoremap <F4> :let $VIM_DIR=expand('%:p:h')<CR>:terminal<CR>cd $VIM_DIR<CR>
-" Add the following lines to ~/.bashrc. With autoshelldir enabled vim will
-" listen for the escape secence sent by the terminal
-"if [[ -n "$VIM_TERMINAL" ]]; then
-"  PROMPT_COMMAND='_vim_sync_PWD'
-"  function _vim_sync_PWD() {
-"    printf '\033]7;file://%s\033\\' "$PWD"
-"  }
-"fi
-set autoshelldir
-tnoremap <F4> <C-A>:terminal<CR>
+-- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
+cmp.setup.cmdline({ '/', '?' }, {
+  mapping = cmp.mapping.preset.cmdline(),
+  sources = {
+    { name = 'buffer' }
+  }
+})
 
-" Use case sentive search for "/" when capital leters used
-set smartcase
-
-let &grepprg='grep -H -n $*'
-"map f :silent grep '\b<cword>\b' <CR>:copen<CR>
-map f :grep -r -I --include=\*.{c,h,cc,cpp,hpp,ino,py,java,kt} '\b<cword>\b' <CR><CR>:copen<CR>
-" grep in current file
-map F :grep -a '\b<cword>\b' % <CR><CR>:copen<CR>
-
-set autoread
-function! YCMrefresh()
-	"Reload changed files
-	execute "e!"
-	"Open all buffers once to recognice them in YCM
-	for i in range(0,50)
-		execute "bn"
-	endfor
-	" jump to first buffer
-	execute "1b"
-	checktime
-endfunction
-
-nnoremap <F5> :call YCMrefresh()<CR>
-":YcmForceCompileAndDiagnostics<CR>
-
-nnoremap <F6> :YcmCompleter RefactorRename 
-nnoremap <F10> :YcmCompleter FixIt<CR>
-" <F11> => Toggle full screen
-nnoremap <F12> :YcmCompleter Format<CR>
-
-"Open URLs
-"nmap gx :silent execute "!xdg-open " . shellescape("<cWORD>")<CR>:redraw!<CR>
-" Also open from Ctrl-Alt-Fx terminal
-nmap gx :silent execute "!DISPLAY=:0 xdg-open " . shellescape("<cWORD>") . " &"<CR>:redraw!<CR>
-
-"Terminal mode
-" Allow to forward Ctrl-W to a application running in the terminal
-set termwinkey=<C-A>
-" Do not use Esc because it has to be forwarded to vim running in the vim terminal
-"tnoremap <Esc> <C-\><C-n>
-tnoremap <C-A> <C-\><C-n>
-" Paste clipboard into terminal
-"TODO blocks Ctrl-V in normal mode to enter block selection mode
-"tnoremap <C-S-V> <C-W>"+
-
-" Navigate between vim windows via Alt-Arrows
-nnoremap <Esc>[1;3D <C-W>h
-nnoremap <Esc>[1;3B <C-W>j
-nnoremap <Esc>[1;3A <C-W>k
-nnoremap <Esc>[1;3C <C-W>l
-inoremap <Esc>[1;3D <Esc><C-W>h
-inoremap <Esc>[1;3B <Esc><C-W>j
-inoremap <Esc>[1;3A <Esc><C-W>k
-inoremap <Esc>[1;3C <Esc><C-W>l
-tnoremap <Esc>[1;3D <C-A>h
-tnoremap <Esc>[1;3B <C-A>j
-tnoremap <Esc>[1;3A <C-A>k
-tnoremap <Esc>[1;3C <C-A>l
-
-" Alt-f opens current buffer in new tab => fullscreen on
-for i in range(97,122)
-  let c = nr2char(i)
-  exec "map \e".c." <A-".c.">"
-  exec "map! \e".c." <A-".c.">"
-  exec "tmap \e".c." <A-".c.">"
-endfor
-nnoremap <A-f> :execute "tab sb ".bufnr("%")<CR>
-inoremap <A-f> <Esc>:execute "tab sb ".bufnr("%")<CR>
-tnoremap <A-f> <C-A>:execute "tab sb ".bufnr("%")<CR>
-" Do not write the file because it might be buffer without a file name
-" Therefore the command would fail
-nnoremap <A-q> :q<CR>
-nnoremap <A-x> :wqa<CR>
-inoremap <A-q> <Esc>:q<CR>
-tnoremap <A-q> <C-A>:q<CR>
-
-"FORMAT
-"======
-set colorcolumn=81
-"Glib and GStreamer
-"set tabstop=8 softtabstop=0 expandtab shiftwidth=2 smarttab
-" 8 char tabs
-"set autoindent noexpandtab tabstop=8 shiftwidth=8
-"Mark down
-set tabstop=4 softtabstop=0 expandtab shiftwidth=4 smarttab
-"ESM
-"set tabstop=3 softtabstop=0 expandtab shiftwidth=3 smarttab
-"set tabstop=2 softtabstop=0 expandtab shiftwidth=2 smarttab
+-- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+cmp.setup.cmdline(':', {
+  mapping = cmp.mapping.preset.cmdline(),
+  sources = cmp.config.sources({
+    { name = 'path' }
+  }, {
+    { name = 'cmdline' }
+  })
+})
 
 
-" Show tabs
-"set list
-"set listchars=tab:>-
+-- Terminal
+-- The terminal can be exited with Alt+q
+vim.keymap.set('n', '<F4>', ":let $VIM_DIR=expand('%:p:h')<CR>:terminal<CR>icd $VIM_DIR<CR>")
+-- Add the following lines to ~/.bashrc. With autoshelldir enabled vim will
+-- listen for the escape sequence sent by the terminal
+--if [[ -n "$VIM_TERMINAL" ]]; then
+--  PROMPT_COMMAND='_vim_sync_PWD'
+--  function _vim_sync_PWD() {
+--    printf '\033]7;file://%s\033\\' "$PWD"
+--  }
+--fi
+-- TODO set autoshelldir
+vim.keymap.set('t', '<F4>', '<C-\\><C-N>:terminal<CR>i')
 
-"Arduino files
-au BufRead,BufNewFile *.ino set filetype=cpp tabstop=2 softtabstop=0 expandtab shiftwidth=2 smarttab
+-- Use case sentive search for "/" when capital leters used
+vim.opt.ignorecase = true
+-- Ignore case when search string is lower case
+vim.opt.smartcase = true
+
+vim.cmd("let &grepprg='grep -H -n $*'")
+-- TODO maybe there is already a solution available in neovim
+-- grep in all files of current working directory
+vim.keymap.set('n', 'f', ":grep -r -I --include=\\*.{c,h,cc,cpp,hpp,ino,py,java,kt} '\b<cword>\b' <CR><CR>:copen<CR>")
+-- grep in current file
+vim.keymap.set('n', 'F', ":grep -a '\b<cword>\b' % <CR><CR>:copen<CR>")
+
+-- TODO set autoread
+-- TODO function! YCMrefresh()
+-- TODO    "Reload changed files
+-- TODO    execute "e!"
+-- TODO    "Open all buffers once to recognice them in YCM
+-- TODO    for i in range(0,50)
+-- TODO    	execute "bn"
+-- TODO    endfor
+-- TODO    " jump to first buffer
+-- TODO    execute "1b"
+-- TODO    checktime
+-- TODO endfunction
+
+--Open URLs
+-- TODO Also open from Ctrl-Alt-Fx terminal
+-- nmap gx :silent execute "!DISPLAY=:0 xdg-open " . shellescape("<cWORD>") . " &"<CR>:redraw!<CR>
+
+--Terminal mode
+-- Do not use Esc because it has to be forwarded to vim running in the vim terminal
+--tnoremap <Esc> <C-\><C-n>
+vim.keymap.set('t', '<C-A>', '<C-\\><C-n>')
+-- Paste clipboard into terminal
+--TODO blocks Ctrl-V in normal mode to enter block selection mode
+--tnoremap <C-S-V> <C-W>"+
+
+-- Navigate between vim windows via Alt-Arrows
+vim.keymap.set('n', '<A-Left>',  '<C-W>h')
+vim.keymap.set('n', '<A-Down>',  '<C-W>j')
+vim.keymap.set('n', '<A-Up>',    '<C-W>k')
+vim.keymap.set('n', '<A-Right>', '<C-W>l')
+vim.keymap.set('i', '<A-Left>',  '<C-o><C-W>h')
+vim.keymap.set('i', '<A-Down>',  '<C-o><C-W>j')
+vim.keymap.set('i', '<A-Up>',    '<C-o><C-W>k')
+vim.keymap.set('i', '<A-Right>', '<C-o><C-W>l')
+-- TODO keep the terminal in insert mode
+vim.keymap.set('t', '<A-Left>',  '<C-\\><C-N><C-W>h')
+vim.keymap.set('t', '<A-Down>',  '<C-\\><C-N><C-W>j')
+vim.keymap.set('t', '<A-Up>',    '<C-\\><C-N><C-W>k')
+vim.keymap.set('t', '<A-Right>', '<C-\\><C-N><C-W>l')
+
+-- Alt-f opens current buffer in new tab => fullscreen on
+vim.keymap.set('n', '<A-f>', ':execute "tab sb ".bufnr("%")<CR>')
+vim.keymap.set('i', '<A-f>', '<C-o>:execute "tab sb ".bufnr("%")<CR>')
+vim.keymap.set('t', '<A-f>', '<C-\\><C-N>:execute "tab sb ".bufnr("%")<CR>i')
+-- Do not write the file because it might be buffer without a file name
+-- Therefore the command would fail
+vim.keymap.set('n', '<A-q>', ':q<CR>')
+vim.keymap.set('n', '<A-x>', ':wqa<CR>')
+vim.keymap.set('i', '<A-q>', '<Esc>:q<CR>')
+vim.keymap.set('t', '<A-q>', '<C-\\><C-N>:q<CR>i')
+
+--FORMAT
+--======
+vim.opt.colorcolumn = '81'
+--Glib and GStreamer
+--set tabstop=8 softtabstop=0 expandtab shiftwidth=2 smarttab
+-- 8 char tabs
+--set autoindent noexpandtab tabstop=8 shiftwidth=8
+--Mark down
+vim.opt.tabstop = 4
+vim.opt.shiftwidth = 4
+-- Convert Tab to spaces
+vim.opt.expandtab = true
+--ESM
+--set tabstop=3 softtabstop=0 expandtab shiftwidth=3 smarttab
+--set tabstop=2 softtabstop=0 expandtab shiftwidth=2 smarttab
 
 
-"OTHER
-"=====
-set ruler
-set backspace=indent,eol,start
-set clipboard=unnamedplus
-" Copy
-"vmap <F7> :!xclip -f -sel clip -d localhost:10.0<CR>
-" Paste
-"map <F8> :r!xclip -o -sel clip -d localhost:10.0<CR>
+-- Show tabs
+--set list
+--set listchars=tab:>-
 
-"Not enabled by default on this machine
-syntax on
-
-" Highlight unwanted white spaces red
-highlight ExtraWhitespace ctermbg=red guibg=red
-match ExtraWhitespace /\s\+$\| \+\ze\t\|\t\+$/ 
-autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
-autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
-autocmd InsertLeave * match ExtraWhitespace /\s\+$/
-autocmd BufWinLeave * call clearmatches()
-
-" vimdiff
-function! DiffToggle()
-    if &diff
-        windo diffoff
-    else
-        windo diffthis
-    endif
-endfunction
-nnoremap <silent> <F8> :call DiffToggle()<CR>
-
-" Spell Check
-let b:myLang=0
-let g:myLangList=["nospell","en","de"]
-function! ToggleSpell()
-  let b:myLang=b:myLang+1
-  if b:myLang>=len(g:myLangList) | let b:myLang=0 | endif
-  if b:myLang==0
-    setlocal nospell
-  else
-    execute "setlocal spell spelllang=".get(g:myLangList, b:myLang)
-  endif
-  echo "spell checking language:" g:myLangList[b:myLang]
-endfunction
-
-nmap <silent> <F7> :call ToggleSpell()<CR>
-imap <F7> <C-o>:call ToggleSpell()<CR>
-" See https://vim.fandom.com/wiki/Toggle_spellcheck_with_function_keys
-
-" See https://unix.stackexchange.com/questions/348771/why-do-vim-colors-look-different-inside-and-outside-of-tmux
-set background=dark
-
-" ignore case for lower cases search strings
-" and respect case for mixed case search strings
-set smartcase
+--Arduino files
+-- TODO au BufRead,BufNewFile *.ino set filetype=cpp tabstop=2 softtabstop=0 expandtab shiftwidth=2 smarttab
 
 
-" Exclude $ from file path when using gf to open files
-set isfname-=$
+--OTHER
+--=====
+-- TODO set ruler
+-- TODO set backspace=indent,eol,start
+vim.opt.clipboard = "unnamedplus"
+-- Copy
+--vmap <F7> :!xclip -f -sel clip -d localhost:10.0<CR>
+-- Paste
+--map <F8> :r!xclip -o -sel clip -d localhost:10.0<CR>
+-- Do not copy data to clipboard when using d
+vim.keymap.set({'n', 'x'}, 'd', '"_d')
+-- Select all with \a
+vim.keymap.set('n', '<leader>a', ':keepjumps normal! ggVG<cr>')
+
+-- Highlight unwanted white spaces red
+-- TODO convert into LUA
+vim.cmd [[
+    highlight ExtraWhitespace ctermbg=red guibg=red
+    match ExtraWhitespace /\s\+$\| \+\ze\t\|\t\+$/ 
+    autocmd BufWinEnter * match ExtraWhitespace /\s\+$/
+    autocmd InsertEnter * match ExtraWhitespace /\s\+\%#\@<!$/
+    autocmd InsertLeave * match ExtraWhitespace /\s\+$/
+    autocmd BufWinLeave * call clearmatches()
+]]
+
+-- vimdiff
+-- TODO convert into LUA
+vim.cmd [[
+    function! DiffToggle()
+        if &diff
+            windo diffoff
+        else
+            windo diffthis
+        endif
+    endfunction
+    nnoremap <silent> <F8> :call DiffToggle()<CR>
+]]
+
+-- Spell Check
+-- TODO convert into LUA
+vim.cmd [[
+    let b:myLang=0
+    let g:myLangList=["nospell","en","de"]
+    function! ToggleSpell()
+      let b:myLang=b:myLang+1
+      if b:myLang>=len(g:myLangList) | let b:myLang=0 | endif
+      if b:myLang==0
+        setlocal nospell
+      else
+        execute "setlocal spell spelllang=".get(g:myLangList, b:myLang)
+      endif
+      echo "spell checking language:" g:myLangList[b:myLang]
+    endfunction
+]]
+vim.keymap.set('n', '<F7>', ':call ToggleSpell()<CR>')
+vim.keymap.set('i', '<F7>', '<C-o>:call ToggleSpell()<CR>')
+-- See https://vim.fandom.com/wiki/Toggle_spellcheck_with_function_keys
+
+
+-- Exclude $ from file path when using gf to open files
+-- TODO convert into LUA
+vim.cmd('set isfname-=$')
+
+
+-- HowTo vimscript to LUA
+-- https://vonheikemen.github.io/devlog/tools/configuring-neovim-using-lua/#editor-settings
+-- Further reading
+-- https://github.com/nanotee/nvim-lua-guide
+
