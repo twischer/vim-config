@@ -35,93 +35,102 @@ end)
 -- Auto-completion
 -- See https://github.com/neovim/nvim-lspconfig/wiki/Autocompletion#nvim-cmp
 -- Add additional capabilities supported by nvim-cmp
-local capabilities = require("cmp_nvim_lsp").default_capabilities()
 
-local lspconfig = require('lspconfig')
-
--- Enable some language servers with the additional completion capabilities offered by nvim-cmp
-local servers = { 'clangd', 'rust_analyzer', 'pyright', 'tsserver' }
-for _, lsp in ipairs(servers) do
-  lspconfig[lsp].setup {
-    -- on_attach = my_custom_on_attach,
-    capabilities = capabilities,
-  }
-end
-
--- luasnip setup
-local luasnip = require 'luasnip'
-
--- nvim-cmp setup
-local cmp = require 'cmp'
-cmp.setup {
-  snippet = {
-    expand = function(args)
-      luasnip.lsp_expand(args.body)
-    end,
-  },
-  mapping = cmp.mapping.preset.insert({
-    ['<C-d>'] = cmp.mapping.scroll_docs(-4),
-    ['<C-f>'] = cmp.mapping.scroll_docs(4),
-    ['<C-Space>'] = cmp.mapping.complete(),
-    ['<CR>'] = cmp.mapping.confirm {
-      behavior = cmp.ConfirmBehavior.Replace,
-      select = true,
-    },
-    ['<Tab>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_next_item()
-      elseif luasnip.expand_or_jumpable() then
-        luasnip.expand_or_jump()
-      else
-        fallback()
-      end
-    end, { 'i', 's' }),
-    ['<S-Tab>'] = cmp.mapping(function(fallback)
-      if cmp.visible() then
-        cmp.select_prev_item()
-      elseif luasnip.jumpable(-1) then
-        luasnip.jump(-1)
-      else
-        fallback()
-      end
-    end, { 'i', 's' }),
-  }),
-  sources = {
-    { name = 'nvim_lsp' },
-    { name = 'luasnip' },
-  },
-}
--- Set configuration for specific filetype.
-cmp.setup.filetype('gitcommit', {
-  sources = cmp.config.sources({
-    { name = 'cmp_git' }, -- You can specify the `cmp_git` source if you were installed it.
-  }, {
-    { name = 'buffer' },
-  })
-})
-
--- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
-cmp.setup.cmdline({ '/', '?' }, {
-  mapping = cmp.mapping.preset.cmdline(),
-  sources = {
-    { name = 'buffer' }
-  }
-})
-
--- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
-cmp.setup.cmdline(':', {
-  mapping = cmp.mapping.preset.cmdline(),
-  sources = cmp.config.sources({
-    { name = 'path' }
-  }, {
-    { name = 'cmdline' }
-  })
-})
+-- TODO uncomment to enabel
+--local capabilities = require("cmp_nvim_lsp").default_capabilities()
+--
+--local lspconfig = require('lspconfig')
+--
+---- Enable some language servers with the additional completion capabilities offered by nvim-cmp
+--local servers = { 'clangd', 'rust_analyzer', 'pyright', 'tsserver' }
+--for _, lsp in ipairs(servers) do
+--  lspconfig[lsp].setup {
+--    -- on_attach = my_custom_on_attach,
+--    capabilities = capabilities,
+--  }
+--end
+--
+---- luasnip setup
+--local luasnip = require 'luasnip'
+--
+---- nvim-cmp setup
+--local cmp = require 'cmp'
+--cmp.setup {
+--  snippet = {
+--    expand = function(args)
+--      luasnip.lsp_expand(args.body)
+--    end,
+--  },
+--  mapping = cmp.mapping.preset.insert({
+--    ['<C-d>'] = cmp.mapping.scroll_docs(-4),
+--    ['<C-f>'] = cmp.mapping.scroll_docs(4),
+--    ['<C-Space>'] = cmp.mapping.complete(),
+--    ['<CR>'] = cmp.mapping.confirm {
+--      behavior = cmp.ConfirmBehavior.Replace,
+--      select = true,
+--    },
+--    ['<Tab>'] = cmp.mapping(function(fallback)
+--      if cmp.visible() then
+--        cmp.select_next_item()
+--      elseif luasnip.expand_or_jumpable() then
+--        luasnip.expand_or_jump()
+--      else
+--        fallback()
+--      end
+--    end, { 'i', 's' }),
+--    ['<S-Tab>'] = cmp.mapping(function(fallback)
+--      if cmp.visible() then
+--        cmp.select_prev_item()
+--      elseif luasnip.jumpable(-1) then
+--        luasnip.jump(-1)
+--      else
+--        fallback()
+--      end
+--    end, { 'i', 's' }),
+--  }),
+--  sources = {
+--    { name = 'nvim_lsp' },
+--    { name = 'luasnip' },
+--  },
+--}
+---- Set configuration for specific filetype.
+--cmp.setup.filetype('gitcommit', {
+--  sources = cmp.config.sources({
+--    { name = 'cmp_git' }, -- You can specify the `cmp_git` source if you were installed it.
+--  }, {
+--    { name = 'buffer' },
+--  })
+--})
+--
+---- Use buffer source for `/` and `?` (if you enabled `native_menu`, this won't work anymore).
+--cmp.setup.cmdline({ '/', '?' }, {
+--  mapping = cmp.mapping.preset.cmdline(),
+--  sources = {
+--    { name = 'buffer' }
+--  }
+--})
+--
+---- Use cmdline & path source for ':' (if you enabled `native_menu`, this won't work anymore).
+--cmp.setup.cmdline(':', {
+--  mapping = cmp.mapping.preset.cmdline(),
+--  sources = cmp.config.sources({
+--    { name = 'path' }
+--  }, {
+--    { name = 'cmdline' }
+--  })
+--})
 
 
 -- Terminal
 -- The terminal can be exited with Alt+q
-vim.keymap.set('n', '<F4>', ":let $VIM_DIR=expand('%:p:h')<CR>:terminal<CR>icd $VIM_DIR<CR>")
+-- Open the terminal underneath the current window
+-- Make it modifiable to allow modifiaction and copy pasting modified version
+local terminalCommand = ':split<CR><C-w><Down>:terminal<CR>:set modifiable<CR>i'
+vim.keymap.set('n', '<F4>', ":let $VIM_DIR=expand('%:p:h')<CR>"..terminalCommand.."cd $VIM_DIR<CR>")
+-- Support to execute command in terminal but staying in normal mode
+-- TODO define command to copy modified command, clean the old one, insert the new one and execute it
+-- TODO cannot be used because copen selection does not work anymore
+--vim.keymap.set('n', '<CR>', 'i<CR><C-\\><C-N>')
 -- Add the following lines to ~/.bashrc. With autoshelldir enabled vim will
 -- listen for the escape sequence sent by the terminal
 --if [[ -n "$VIM_TERMINAL" ]]; then
@@ -131,7 +140,8 @@ vim.keymap.set('n', '<F4>', ":let $VIM_DIR=expand('%:p:h')<CR>:terminal<CR>icd $
 --  }
 --fi
 -- TODO set autoshelldir
-vim.keymap.set('t', '<F4>', '<C-\\><C-N>:terminal<CR>i')
+vim.keymap.set('t', '<F4>', '<C-\\><C-N>'..terminalCommand)
+-- TODO support command to remove last directory (everything to the left till "/")
 
 -- Use case sentive search for "/" when capital leters used
 vim.opt.ignorecase = true
@@ -141,9 +151,9 @@ vim.opt.smartcase = true
 vim.cmd("let &grepprg='grep -H -n $*'")
 -- TODO maybe there is already a solution available in neovim
 -- grep in all files of current working directory
-vim.keymap.set('n', 'f', ":grep -r -I --include=\\*.{c,h,cc,cpp,hpp,ino,py,java,kt} '\b<cword>\b' <CR><CR>:copen<CR>")
+vim.keymap.set('n', 'f', ":grep -r -I --include=\\*.{c,h,cc,cpp,hpp,ino,py,java,kt} '\\b<cword>\\b' <CR><CR>:copen<CR>")
 -- grep in current file
-vim.keymap.set('n', 'F', ":grep -a '\b<cword>\b' % <CR><CR>:copen<CR>")
+vim.keymap.set('n', 'F', ":grep -a '\\b<cword>\\b' % <CR><CR>:copen<CR>")
 
 -- TODO set autoread
 -- TODO function! YCMrefresh()
@@ -160,6 +170,7 @@ vim.keymap.set('n', 'F', ":grep -a '\b<cword>\b' % <CR><CR>:copen<CR>")
 
 --Open URLs
 -- TODO Also open from Ctrl-Alt-Fx terminal
+-- TODO Currently not required because the color schem in Ctrl-Alt-Fx terminal is quite bad
 -- nmap gx :silent execute "!DISPLAY=:0 xdg-open " . shellescape("<cWORD>") . " &"<CR>:redraw!<CR>
 
 --Terminal mode
@@ -175,11 +186,12 @@ vim.keymap.set('n', '<A-Left>',  '<C-W>h')
 vim.keymap.set('n', '<A-Down>',  '<C-W>j')
 vim.keymap.set('n', '<A-Up>',    '<C-W>k')
 vim.keymap.set('n', '<A-Right>', '<C-W>l')
-vim.keymap.set('i', '<A-Left>',  '<C-o><C-W>h')
-vim.keymap.set('i', '<A-Down>',  '<C-o><C-W>j')
-vim.keymap.set('i', '<A-Up>',    '<C-o><C-W>k')
-vim.keymap.set('i', '<A-Right>', '<C-o><C-W>l')
--- TODO keep the terminal in insert mode
+-- Do not stay in insert mode with <C-o> because newly selected window will also being in insert mode
+vim.keymap.set('i', '<A-Left>',  '<Esc><C-W>h')
+vim.keymap.set('i', '<A-Down>',  '<Esc><C-W>j')
+vim.keymap.set('i', '<A-Up>',    '<Esc><C-W>k')
+vim.keymap.set('i', '<A-Right>', '<Esc><C-W>l')
+-- No need to keep the terminal in insert mode because pasting is also possible in normal mode
 vim.keymap.set('t', '<A-Left>',  '<C-\\><C-N><C-W>h')
 vim.keymap.set('t', '<A-Down>',  '<C-\\><C-N><C-W>j')
 vim.keymap.set('t', '<A-Up>',    '<C-\\><C-N><C-W>k')
@@ -279,11 +291,16 @@ vim.keymap.set('n', '<F7>', ':call ToggleSpell()<CR>')
 vim.keymap.set('i', '<F7>', '<C-o>:call ToggleSpell()<CR>')
 -- See https://vim.fandom.com/wiki/Toggle_spellcheck_with_function_keys
 
+-- See https://unix.stackexchange.com/questions/348771/why-do-vim-colors-look-different-inside-and-outside-of-tmux
+-- This does not change the color in rescue terminal mode
+--vim.opt.background = 'dark'
 
 -- Exclude $ from file path when using gf to open files
 -- TODO convert into LUA
 vim.cmd('set isfname-=$')
 
+-- Start always with split screen
+--vim.cmd(':vsplit')
 
 -- HowTo vimscript to LUA
 -- https://vonheikemen.github.io/devlog/tools/configuring-neovim-using-lua/#editor-settings
