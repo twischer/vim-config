@@ -1,8 +1,5 @@
-TODO do not use Alt-Arrow for switching between windows becasue it is used for Copilot
 TODO how to open inline chat of copilot in neovim
-TODO use alternative mapping for switch window becasue alt-Arrow already used in vscode to go backwards
-TODO Ctrl-o = ctlr-| cltr-_
-TODO move windows
+TODO move windows with ALT-HJKL
 TODO remove previous word: find alternative in vim to Ctrl-W
 TODO provide key code to set formwat to git and open git commit
 TODO do not insert additional newlines in copy of terminal output when terminal window to small
@@ -86,6 +83,16 @@ TODO tastenkombi festlegen, um Wörter zu selktieren und mit kürser von wort zu
 TODO find alternative way for autoshelldir https://vimhelp.org/terminal.txt.html#terminal-autoshelldir
 TODO Multiscreen vim
 - Doublicate session output, freeze inactive session, open last tap on resume
+    * screen is able to attach to active session twice
+        * maybe it also supports to freeze the screen
+        * So a script only has to do the folloing steps when receiving an input in an currently inactive session
+            * freeze previous screen
+            * switch vim tab to 1 or 2 or even previous tab of this screen
+            * unfreeze current screen
+            * forward last command
+        * Maybe even terminal input does not need to be got from active session
+            * So input from any session is collected and there is a key code to switch inut to the other session
+* TODO windows avoid grouping and try to add batch file to start bar. So Meta-1 and Meta-2 can be used to switch between terminal of both screens
 TODO execute shell scripts like make files to allow setting enviornment and executing make
 TODO git difftool dateien nach vim session schieben
 ? git diff in :! ausführen

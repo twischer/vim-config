@@ -117,11 +117,9 @@ Split windows
 CTRL-W +	   increase current window height N lines
 CTRL-W -	   decrease current window height N lines
 CTRL-W <	   decrease current window width N columns
-CTRL-W =	   make all windows the same height & width
 CTRL-W >	   increase current window width N columns
-Ctrl-w O	Fullscreen close other buffers
-Ctrl-w _ Ctrl+W |	Fullscreen  (Alt+f and Alt+q)
-Ctrl-w =		Windows
+ALT-o          Fullscreen
+ALT-=   	   make all windows the same height & width
 
 CTRL-W H	   move current window to the far left
 CTRL-W J	   move current window to the very bottom
@@ -135,7 +133,7 @@ CTRL-W h	   go to Nth left window (stop at first window)
 CTRL-W j	   go N windows down (stop at last window)
 CTRL-W k	   go N windows up (stop at first window)
 CTRL-W l	   go to Nth right window (stop at last window)
-ALT-Arrows     go to window
+ALT-hjkl       go to window
 CTRL-W p	   go to previous (last accessed) window
 CTRL-W w	   go to N next window (wrap around)
 

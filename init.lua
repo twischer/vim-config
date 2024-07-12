@@ -176,31 +176,36 @@ vim.keymap.set('n', 'F', ":grep -a '\\b<cword>\\b' % <CR><CR>:copen<CR>")
 --Terminal mode
 -- Do not use Esc because it has to be forwarded to vim running in the vim terminal
 --tnoremap <Esc> <C-\><C-n>
-vim.keymap.set('t', '<C-A>', '<C-\\><C-n>')
+vim.keymap.set('t', '<A-a>', '<C-\\><C-n>')
 -- Paste clipboard into terminal
 --TODO blocks Ctrl-V in normal mode to enter block selection mode
 --tnoremap <C-S-V> <C-W>"+
 
--- Navigate between vim windows via Alt-Arrows
-vim.keymap.set('n', '<A-Left>',  '<C-W>h')
-vim.keymap.set('n', '<A-Down>',  '<C-W>j')
-vim.keymap.set('n', '<A-Up>',    '<C-W>k')
-vim.keymap.set('n', '<A-Right>', '<C-W>l')
+-- Navigate between vim windows via Alt-hjkl
+-- Alt-Arrows are used in vscode and need movement of the fingers away from letters
+vim.keymap.set('n', '<A-h>',  '<C-W>h')
+vim.keymap.set('n', '<A-j>',  '<C-W>j')
+vim.keymap.set('n', '<A-k>',    '<C-W>k')
+vim.keymap.set('n', '<A-l>', '<C-W>l')
 -- Do not stay in insert mode with <C-o> because newly selected window will also being in insert mode
-vim.keymap.set('i', '<A-Left>',  '<Esc><C-W>h')
-vim.keymap.set('i', '<A-Down>',  '<Esc><C-W>j')
-vim.keymap.set('i', '<A-Up>',    '<Esc><C-W>k')
-vim.keymap.set('i', '<A-Right>', '<Esc><C-W>l')
+vim.keymap.set('i', '<A-h>',  '<Esc><C-W>h')
+vim.keymap.set('i', '<A-j>',  '<Esc><C-W>j')
+vim.keymap.set('i', '<A-k>',    '<Esc><C-W>k')
+vim.keymap.set('i', '<A-l>', '<Esc><C-W>l')
 -- No need to keep the terminal in insert mode because pasting is also possible in normal mode
-vim.keymap.set('t', '<A-Left>',  '<C-\\><C-N><C-W>h')
-vim.keymap.set('t', '<A-Down>',  '<C-\\><C-N><C-W>j')
-vim.keymap.set('t', '<A-Up>',    '<C-\\><C-N><C-W>k')
-vim.keymap.set('t', '<A-Right>', '<C-\\><C-N><C-W>l')
+vim.keymap.set('t', '<A-h>',  '<C-\\><C-N><C-W>h')
+vim.keymap.set('t', '<A-j>',  '<C-\\><C-N><C-W>j')
+vim.keymap.set('t', '<A-k>',    '<C-\\><C-N><C-W>k')
+vim.keymap.set('t', '<A-l>', '<C-\\><C-N><C-W>l')
 
--- Alt-f opens current buffer in new tab => fullscreen on
-vim.keymap.set('n', '<A-f>', ':execute "tab sb ".bufnr("%")<CR>')
-vim.keymap.set('i', '<A-f>', '<C-o>:execute "tab sb ".bufnr("%")<CR>')
-vim.keymap.set('t', '<A-f>', '<C-\\><C-N>:execute "tab sb ".bufnr("%")<CR>i')
+-- Alt-o fullscreen current window
+-- Do not use a new tab because tabs might be used for multiscreen support
+vim.keymap.set('n', '<A-o>', '<C-w>|<C-w>_')
+vim.keymap.set('i', '<A-o>', '<C-o><C-w>|<C-w>_')
+vim.keymap.set('t', '<A-o>', '<C-\\><C-N><C-w>|<C-w>_i')
+vim.keymap.set('n', '<A-=>', '<C-w>=')
+vim.keymap.set('i', '<A-=>', '<C-o><C-w>=')
+vim.keymap.set('t', '<A-=>', '<C-\\><C-N><C-w>=i')
 -- Do not write the file because it might be buffer without a file name
 -- Therefore the command would fail
 vim.keymap.set('n', '<A-q>', ':q<CR>')
