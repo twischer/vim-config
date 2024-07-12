@@ -1,3 +1,10 @@
+TODO do not use Alt-Arrow for switching between windows becasue it is used for Copilot
+TODO how to open inline chat of copilot in neovim
+TODO use alternative mapping for switch window becasue alt-Arrow already used in vscode to go backwards
+TODO Ctrl-o = ctlr-| cltr-_
+TODO move windows
+TODO remove previous word: find alternative in vim to Ctrl-W
+TODO provide key code to set formwat to git and open git commit
 TODO do not insert additional newlines in copy of terminal output when terminal window to small
 TODO :copen always at buttom over full width of vim
 ? Maybe workarounded by full screen via new tab
@@ -10,6 +17,22 @@ TODO change pwd of vim to path of terminal or allow to open file relative to ter
 TODO search case insensitive when in small letters
 TODO Alt+q opens the latest opened file in the small sized window
     - Alt+f can be used for searching in files and Alt+q the last file will still be open
+
+TODO provide command to open additional command line in same path
+TODO use go file (gf) mechanism to open a terminal in a certain directory
+    + works even in terminal when leaving insert mode
+- not needed if using vim
+- vim as tiling manager can only be used when two screens are supported
+
+# Copy & paste between Windows and Linux
+Support copy paste from vim to Windows via SSH
+Workaround:
+- start RDP session only for clipboard forwarding
+    TODO search for RDP without screen sharing
+TODO still use of line break conversion from windows to linux
+    - Maybe provide shortcut in vim to convert it
+TODO windows command clip can be used to copy from terminal to windows clipboard
+
 
 tmux + vim
 ==========

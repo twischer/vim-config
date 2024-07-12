@@ -164,13 +164,20 @@ i			Enter insert mode
 
 Auto-Completion
 ===============
+ALT-]       Cycle to the next suggestion
+ALT-[       Cycle to the previous suggestion.
+ALT-Right   Accept the next word of the current suggestion.
+ALT-Ctrl-Right  Accept the next line of the current suggestion.
+# see :help copilot
+
 #CTRL-W d	   split window and jump to definition under the cursor
 #CTRL-W i	   split window and jump to declaration of identifier under the cursor
 
 See https://github.com/github/copilot.vim#getting-started
-sudo apt install nodejs
+sudo apt install nodejs OR download from nodejs.com
 git clone https://github.com/github/copilot.vim.git ~/.config/nvim/pack/github/start/copilot.vim
 :Copilot setup
+:Copilot enable
 
 
 TODO do lookup with GIT in case it is a hash
