@@ -121,17 +121,8 @@ CTRL-W >	   increase current window width N columns
 ALT-o          Fullscreen
 ALT-=   	   make all windows the same height & width
 
-CTRL-W H	   move current window to the far left
-CTRL-W J	   move current window to the very bottom
-CTRL-W K	   move current window to the very top
-CTRL-W L	   move current window to the far right
-Ctrl-w x		Swap window with lower one
-
-CTRL-W h	   go to Nth left window (stop at first window)
-CTRL-W j	   go N windows down (stop at last window)
-CTRL-W k	   go N windows up (stop at first window)
-CTRL-W l	   go to Nth right window (stop at last window)
 ALT-hjkl       go to window
+ALT-HJKL       Move window
 CTRL-W p	   go to previous (last accessed) window
 CTRL-W w	   go to N next window (wrap around)
 

@@ -190,11 +190,12 @@ vim.keymap.set('t', '<A-a>', '<C-\\><C-n>')
 -- Navigate between vim windows via Alt-hjkl
 -- Alt-Arrows are used in vscode and need movement of the fingers away from letters
 for index, key in ipairs({'h', 'j', 'k', 'l'}) do
-  vim.keymap.set('n', '<A-'..key..'>', '<C-W>'..key)
-  -- Do not stay in insert mode with <C-o> because newly selected window will also being in insert mode
-  vim.keymap.set('i', '<A-'..key..'>', '<Esc><C-W>'..key)
-  -- No need to keep the terminal in insert mode because pasting is also possible in normal mode
-  vim.keymap.set('t', '<A-'..key..'>', '<C-\\><C-N><C-W>'..key)
+  vim.keymap.set({'n', 'i', 't'}, '<A-'..key..'>', '<Cmd>wincmd '..key..'<CR>')
+end
+
+-- Support moving windows
+for direction, key in pairs({['left']='H', ['down']='J', ['up']='K', ['right']='L'}) do
+  vim.keymap.set({'n', 'i', 't'}, '<A-'..key..'>', '<Cmd>WinShift '..direction..'<CR>')
 end
 
 -- Alt-o fullscreen current window
