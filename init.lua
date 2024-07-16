@@ -1,10 +1,11 @@
 -- Execute the following commands to install packer.vim
 -- git clone --depth 1 https://github.com/wbthomason/packer.nvim ~/.local/share/nvim/site/pack/packer/start/packer.nvim
 -- :packadd packer.nvim
+-- For installing/updating plugins uncomment sync() call at the end once
 
-local use = require('packer').use
-require('packer').startup(function()
-  --use 'wbthomason/packer.nvim'
+--local use = require('packer').use
+require('packer').startup(function(use)
+  use 'wbthomason/packer.nvim'
   --use 'neovim/nvim-lspconfig' -- Collection of configurations for built-in LSP client
   --use 'hrsh7th/nvim-cmp' -- Autocompletion plugin
   --use 'hrsh7th/cmp-nvim-lsp' -- LSP source for nvim-cmp
@@ -18,7 +19,7 @@ require('packer').startup(function()
   run = ':TSUpdate'
   -- GIT diff viewer
   use { 'sindrets/diffview.nvim', requires = 'nvim-lua/plenary.nvim' }
-  -- Fast jump to words simular to kumping to links in vimium for Firefox
+  -- Fast jump to words simular to jumping to links in vimium for Firefox
   -- TODO test it later
   --use {
   --  'phaazon/hop.nvim',
@@ -28,9 +29,14 @@ require('packer').startup(function()
   --    require'hop'.setup { keys = 'etovxqpdygfblzhckisuran' }
   --  end
   --}
-  -- Uncomment to update all plugins
+  -- Support moving windows with Alt-hjkl
+  use 'sindrets/winshift.nvim'
+  --require("winshift").setup()
+
+  -- TODO Uncomment to install/update all plugins
   --require('packer').sync()
 end)
+
 
 -- Auto-completion
 -- See https://github.com/neovim/nvim-lspconfig/wiki/Autocompletion#nvim-cmp
@@ -183,20 +189,13 @@ vim.keymap.set('t', '<A-a>', '<C-\\><C-n>')
 
 -- Navigate between vim windows via Alt-hjkl
 -- Alt-Arrows are used in vscode and need movement of the fingers away from letters
-vim.keymap.set('n', '<A-h>',  '<C-W>h')
-vim.keymap.set('n', '<A-j>',  '<C-W>j')
-vim.keymap.set('n', '<A-k>',    '<C-W>k')
-vim.keymap.set('n', '<A-l>', '<C-W>l')
--- Do not stay in insert mode with <C-o> because newly selected window will also being in insert mode
-vim.keymap.set('i', '<A-h>',  '<Esc><C-W>h')
-vim.keymap.set('i', '<A-j>',  '<Esc><C-W>j')
-vim.keymap.set('i', '<A-k>',    '<Esc><C-W>k')
-vim.keymap.set('i', '<A-l>', '<Esc><C-W>l')
--- No need to keep the terminal in insert mode because pasting is also possible in normal mode
-vim.keymap.set('t', '<A-h>',  '<C-\\><C-N><C-W>h')
-vim.keymap.set('t', '<A-j>',  '<C-\\><C-N><C-W>j')
-vim.keymap.set('t', '<A-k>',    '<C-\\><C-N><C-W>k')
-vim.keymap.set('t', '<A-l>', '<C-\\><C-N><C-W>l')
+for index, key in ipairs({'h', 'j', 'k', 'l'}) do
+  vim.keymap.set('n', '<A-'..key..'>', '<C-W>'..key)
+  -- Do not stay in insert mode with <C-o> because newly selected window will also being in insert mode
+  vim.keymap.set('i', '<A-'..key..'>', '<Esc><C-W>'..key)
+  -- No need to keep the terminal in insert mode because pasting is also possible in normal mode
+  vim.keymap.set('t', '<A-'..key..'>', '<C-\\><C-N><C-W>'..key)
+end
 
 -- Alt-o fullscreen current window
 -- Do not use a new tab because tabs might be used for multiscreen support
@@ -211,6 +210,8 @@ vim.keymap.set('t', '<A-=>', '<C-\\><C-N><C-w>=i')
 vim.keymap.set('n', '<A-q>', ':q<CR>')
 vim.keymap.set('n', '<A-x>', ':wqa<CR>')
 vim.keymap.set('i', '<A-q>', '<Esc>:q<CR>')
+-- TODO try <Cmd> instead of : to avoid leaving insert mode
+-- nnoremap <C-M-H> <Cmd>WinShift left<CR
 vim.keymap.set('t', '<A-q>', '<C-\\><C-N>:q<CR>i')
 
 --FORMAT

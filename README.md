@@ -125,8 +125,6 @@ CTRL-W H	   move current window to the far left
 CTRL-W J	   move current window to the very bottom
 CTRL-W K	   move current window to the very top
 CTRL-W L	   move current window to the far right
-CTRL-W R	   rotate windows upwards N times
-CTRL-W r	   rotate windows downwards N times
 Ctrl-w x		Swap window with lower one
 
 CTRL-W h	   go to Nth left window (stop at first window)
