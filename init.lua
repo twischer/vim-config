@@ -245,10 +245,6 @@ vim.opt.expandtab = true
 -- TODO set ruler
 -- TODO set backspace=indent,eol,start
 vim.opt.clipboard = "unnamedplus"
--- Copy
---vmap <F7> :!xclip -f -sel clip -d localhost:10.0<CR>
--- Paste
---map <F8> :r!xclip -o -sel clip -d localhost:10.0<CR>
 -- Do not copy data to clipboard when using d
 vim.keymap.set({'n', 'x'}, 'd', '"_d')
 -- Select all with \a

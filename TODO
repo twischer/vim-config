@@ -1,3 +1,12 @@
+TODO enter executes command in terminal even if not in insert mode
+TODO open selection in new editor window (helpful for modifing command line of terminal and further filtering log messages)
+TODO change vim directory when calling pwd2CLipboard
+TODO map terminal exit to Esc
+* Only works if never again vim is opened in such terminal
+* maybe replace vim command in this terminal with copy to clipboard command to open file in split view in running vim
+* or forward Esc to vim in vim-term when pressing e.g. Alt-A
+TODO add additional seperation between vim windows to highlight active window
++ ALternative stay in WIN MOVE MODE (:W) as long as Alt is pressed (or only highlight the whole window so long as it is done by win move
 TODO how to open inline chat of copilot in neovim
 TODO move windows with ALT-HJKL
 TODO remove previous word: find alternative in vim to Ctrl-W

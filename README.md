@@ -133,6 +133,7 @@ gt		   go to the next tab page
 g<Tab>		   go to last accessed tab page
 gD		1  go to definition of word under the cursor in current file
 gd		1  go to definition of word under the cursor in current function
+Ctrl-W T    move window to new tab
 
 vimdiff
 -------
