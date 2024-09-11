@@ -39,6 +39,23 @@ TODO still use of line break conversion from windows to linux
     - Maybe provide shortcut in vim to convert it
 TODO windows command clip can be used to copy from terminal to windows clipboard
 
+# webbrowser
+
+## firefox via xrdp
+- too slow with high latency connection
+
+## firefox on windows
+- do not download files on/via windows machine
+TODO check for plugin to trigger downloads on remote
+- support key combinations like vimium
+
+## browsh (even less bandwith required, intresting for working in train)
+- does not support Jira, Gerrit, ...
+* browsh can show webpage in console with colors simular to tiv
+- Not supported in Linux console Alt+Ctrl+F1 in getty. Because only 512 unicode charcaters are used.
+  Therefore the follwoing character is not supported
+  ▚
+  See https://askubuntu.com/questions/23610/how-to-enable-unicode-support-in-a-tty
 
 tmux + vim
 ==========
