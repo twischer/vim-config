@@ -31,18 +31,27 @@ NG			Zu Zeile N springen
 ==		2  filter N lines through "indent" TODO may be auto indention
 
 A		2  append text after the end of the line N times
+I           prepend text before the beginning of the line
 O		2  begin a new line above the cursor and insert text, repeat N times
 o		2  begin a new line underneath the cursor and insert text, repeat N times
 J		2  Join N lines; default is 2
 gJ		2  join lines without inserting space
 x               Delete character under the cursor
 X               Delete character left of the cursor
+cw          Change word
 dd              Delete current line
+d0              Delete to the beginning of the line
+d$              Delete to the end of the line
 dw              Delete current word
+dG              Delete to the end of the file
+dFc             Delete to the next character c
+$dF/            Delete last part of a path
 D               Delete to the end of the line
 yy or Y 		to copy the line
 p 			to paste the copied or deleted text after the current line
 P 			to paste the copied or deleted text before the current line
+%           Jump to matching bracket (, {, [ or ])
+fc          Find next character c
 
 Replace mutliple characters in mutliple lines
     <CTRL-v>   select the area
@@ -63,6 +72,17 @@ q:		   edit : command-line in command-line window
 q/		   edit / command-line in command-line window
 q?		   edit ? command-line in command-line window
 TODO why is q! for command line not supported
+
+## Terminal vi mode (set -o vi)
+### Insert mode
+!!  Run last command again
+fc  Open last command in editor and run it afterwards
+### Command mode
+# commands latest command
+k   last command in history, 2k second last
+/   search history * can be used for any
+K   last command in history which starts with current commandline (requires binding in ~/.inputrc)
+See https://catonmat.net/ftp/bash-vi-editing-mode-cheat-sheet.pdf
 
 Hex Editor
 ==========

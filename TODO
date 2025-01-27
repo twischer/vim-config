@@ -1,3 +1,6 @@
+TODO Change vim to directory mentioned before current courser and leave edit mode
+See send-remote wait-remote ... for posible options
+
 TODO enter executes command in terminal even if not in insert mode
 TODO open selection in new editor window (helpful for modifing command line of terminal and further filtering log messages)
 TODO change vim directory when calling pwd2CLipboard
@@ -39,18 +42,29 @@ TODO still use of line break conversion from windows to linux
     - Maybe provide shortcut in vim to convert it
 TODO windows command clip can be used to copy from terminal to windows clipboard
 
+
 # webbrowser
+* Download files on remote machine
+=> Solved by ~/bin/o
+* Support browsing via keyboard
+=> TODO Use firefox from WSL with vimium via X11 forwarding
+=> vimium supported now in Windows
 
 ## firefox via xrdp
 - too slow with high latency connection
++ copy & paste by only selecting the text
+
+## firefix via X11 Windows 11 SSH forwarding
+TODO test it once installed
 
 ## firefox on windows
-- do not download files on/via windows machine
 TODO check for plugin to trigger downloads on remote
 - support key combinations like vimium
+=> Workaround exists, See above
 
 ## browsh (even less bandwith required, intresting for working in train)
 - does not support Jira, Gerrit, ...
+TODO switch to fullview/non asciart for not supported web pages e.g. when using browsh in a browser
 * browsh can show webpage in console with colors simular to tiv
 - Not supported in Linux console Alt+Ctrl+F1 in getty. Because only 512 unicode charcaters are used.
   Therefore the follwoing character is not supported

@@ -128,13 +128,11 @@ end)
 
 
 -- Terminal
--- The terminal can be exited with Alt+q
 -- Open the terminal underneath the current window
 -- Make it modifiable to allow modifiaction and copy pasting modified version
 local terminalCommand = ':split<CR><C-w><Down>:terminal<CR>:set modifiable<CR>i'
 vim.keymap.set('n', '<F4>', ":let $VIM_DIR=expand('%:p:h')<CR>"..terminalCommand.."cd $VIM_DIR<CR>")
 -- Support to execute command in terminal but staying in normal mode
--- TODO define command to copy modified command, clean the old one, insert the new one and execute it
 -- TODO cannot be used because copen selection does not work anymore
 --vim.keymap.set('n', '<CR>', 'i<CR><C-\\><C-N>')
 -- Add the following lines to ~/.bashrc. With autoshelldir enabled vim will
@@ -206,14 +204,6 @@ vim.keymap.set('t', '<A-o>', '<C-\\><C-N><C-w>|<C-w>_i')
 vim.keymap.set('n', '<A-=>', '<C-w>=')
 vim.keymap.set('i', '<A-=>', '<C-o><C-w>=')
 vim.keymap.set('t', '<A-=>', '<C-\\><C-N><C-w>=i')
--- Do not write the file because it might be buffer without a file name
--- Therefore the command would fail
-vim.keymap.set('n', '<A-q>', ':q<CR>')
-vim.keymap.set('n', '<A-x>', ':wqa<CR>')
-vim.keymap.set('i', '<A-q>', '<Esc>:q<CR>')
--- TODO try <Cmd> instead of : to avoid leaving insert mode
--- nnoremap <C-M-H> <Cmd>WinShift left<CR
-vim.keymap.set('t', '<A-q>', '<C-\\><C-N>:q<CR>i')
 
 --FORMAT
 --======
