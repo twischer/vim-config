@@ -1,3 +1,8 @@
+set keymap vi-insert
+# Type 'kk' quickly to drop into Normal Mode
+"kk": vi-movement-mode
+
 set keymap vi-command
 K:history-search-backward
 J:history-search-forward
+

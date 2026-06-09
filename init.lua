@@ -33,6 +33,8 @@ require('packer').startup(function(use)
   use 'sindrets/winshift.nvim'
   --require("winshift").setup()
 
+  use 'subnut/nvim-ghost.nvim'
+
   -- TODO Uncomment to install/update all plugins
   --require('packer').sync()
 end)
@@ -126,6 +128,9 @@ end)
 --  })
 --})
 
+
+-- Switch from insert mode to normal mode by kk
+vim.keymap.set('i', 'kk', '<Esc>')
 
 -- Terminal
 -- Open the terminal underneath the current window
