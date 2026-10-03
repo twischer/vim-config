@@ -157,6 +157,19 @@ local open_telescope = function()
 end
 vim.keymap.set({ "n", "i", "t" }, '<C-Tab>', open_telescope)
 
+-- When switching to terminal put terminal into insert mode
+vim.api.nvim_create_autocmd({ "BufEnter", "WinEnter" }, {
+  group = vim.api.nvim_create_augroup("TerminalAutoInsert", { clear = true }),
+  callback = function(args)
+    vim.schedule(function()
+      -- Prüfen, ob der aktuell FOKUSSIERTE Buffer WIRKLICH ein Terminal ist
+      if vim.api.nvim_get_option_value("buftype", { buf = 0 }) == "terminal" then
+        vim.cmd("startinsert")
+      end
+    end)
+  end,
+})
+
 -- Terminal
 vim.keymap.set({ "n", "i", "t" }, "<C-t>", function()
   local current_dir = vim.fn.expand("%:p:h")

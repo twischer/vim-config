@@ -1,54 +1,10 @@
-TODO Change vim to directory mentioned before current courser and leave edit mode
-See send-remote wait-remote ... for posible options
-
-TODO enter executes command in terminal even if not in insert mode
 TODO open selection in new editor window (helpful for modifing command line of terminal and further filtering log messages)
-TODO change vim directory when calling pwd2CLipboard
-TODO map terminal exit to Esc
-* Only works if never again vim is opened in such terminal
-* maybe replace vim command in this terminal with copy to clipboard command to open file in split view in running vim
-* or forward Esc to vim in vim-term when pressing e.g. Alt-A
-TODO add additional seperation between vim windows to highlight active window
-+ ALternative stay in WIN MOVE MODE (:W) as long as Alt is pressed (or only highlight the whole window so long as it is done by win move
-TODO how to open inline chat of copilot in neovim
-TODO move windows with ALT-HJKL
 TODO remove previous word: find alternative in vim to Ctrl-W
-TODO provide key code to set formwat to git and open git commit
-TODO do not insert additional newlines in copy of terminal output when terminal window to small
-TODO :copen always at buttom over full width of vim
-? Maybe workarounded by full screen via new tab
-    - Fullscreen via new tab difficult to support multi screen setup
-TODO :copen enter opens always in window where f or F was pressed
-TODO support to switch to already opened buffer by selecting it via arrow keys
-- is slower compared to :Nb when N is known
-TODO change pwd of vim to path of terminal or allow to open file relative to terminal path
-- eigentlich nicht nötig, da ich erst datei öffnen kann und dann terminal in verzeichnis von datei
-TODO search case insensitive when in small letters
-TODO Alt+q opens the latest opened file in the small sized window
-    - Alt+f can be used for searching in files and Alt+q the last file will still be open
-
 TODO provide command to open additional command line in same path
-TODO use go file (gf) mechanism to open a terminal in a certain directory
-    + works even in terminal when leaving insert mode
-- not needed if using vim
-- vim as tiling manager can only be used when two screens are supported
-
-# Copy & paste between Windows and Linux
-Support copy paste from vim to Windows via SSH
-Workaround:
-- start RDP session only for clipboard forwarding
-    TODO search for RDP without screen sharing
-TODO still use of line break conversion from windows to linux
-    - Maybe provide shortcut in vim to convert it
-TODO windows command clip can be used to copy from terminal to windows clipboard
-
 
 # webbrowser
 * Download files on remote machine
 => Solved by ~/bin/o
-* Support browsing via keyboard
-=> TODO Use firefox from WSL with vimium via X11 forwarding
-=> vimium supported now in Windows
 
 ## firefox via xrdp
 - too slow with high latency connection
@@ -59,8 +15,6 @@ TODO test it once installed
 
 ## firefox on windows
 TODO check for plugin to trigger downloads on remote
-- support key combinations like vimium
-=> Workaround exists, See above
 
 ## browsh (even less bandwith required, intresting for working in train)
 - does not support Jira, Gerrit, ...
@@ -70,6 +24,7 @@ TODO switch to fullview/non asciart for not supported web pages e.g. when using 
   Therefore the follwoing character is not supported
   ▚
   See https://askubuntu.com/questions/23610/how-to-enable-unicode-support-in-a-tty
+- vimium key binding support is much better with Tridactyl in firefox
 
 tmux + vim
 ==========
@@ -115,12 +70,7 @@ $ vim --servername vimdiff ...
 $ vimdiff --remote-wait  ...
 - Some additional logic has to be done to open the files in split window and a key for closing them
 - When vimdiff in vim term muss Ctrl-W weitergeleitet werden können
-TODO Ctrl-Arrow keys not working to navigate per word
-TODO Alt-Arrow keys used in Alt-Ctrl-Fx terminal to switch between terminals
 - find another key code e.g. Windows key
-TODO tastenkombi festlegen, um Wörter zu selktieren und mit kürser von wort zu wort springen
-- tastenkombi um kopieren und ins selbe termininal einfügen
-TODO find alternative way for autoshelldir https://vimhelp.org/terminal.txt.html#terminal-autoshelldir
 TODO Multiscreen vim
 - Doublicate session output, freeze inactive session, open last tap on resume
     * screen is able to attach to active session twice
@@ -133,12 +83,10 @@ TODO Multiscreen vim
         * Maybe even terminal input does not need to be got from active session
             * So input from any session is collected and there is a key code to switch inut to the other session
 * TODO windows avoid grouping and try to add batch file to start bar. So Meta-1 and Meta-2 can be used to switch between terminal of both screens
-TODO execute shell scripts like make files to allow setting enviornment and executing make
 TODO git difftool dateien nach vim session schieben
 ? git diff in :! ausführen
 	- Key binding forwarding aktivieren before commando ausgeführt wird
 	- autocomplete fehlt
-browsh utf issue in tty1?
 fast switch between X11 and console
 $ sudo chvt 7
 - Add key binding to swap between tty1 (vim) and tty7(X11)
